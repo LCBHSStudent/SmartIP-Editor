@@ -64,7 +64,7 @@ QMAKE_LINK = @: IGNORE THIS LINE
 OBJECTS_DIR =
 win32:CONFIG -= embed_manifest_exe
 
-TRANSLATIONS = $$prependAppend(LANGUAGES, $$PWD/shotcut_, .ts)
+TRANSLATIONS = $$prependAppend(LANGUAGES, $$PWD/editor_, .ts)
 LUPDATE = $$[QT_INSTALL_BINS]/lupdate -locations absolute -no-obsolete
 LRELEASE = $$QMAKE_LRELEASE
 isEmpty(LRELEASE):LRELEASE = $$[QT_INSTALL_BINS]/lrelease
@@ -75,9 +75,9 @@ QMAKE_EXTRA_TARGETS += ts
 win32 {
     TARGET_DIR = .
 } else:macx {
-    TARGET_DIR = ../src/Shotcut.app/Contents/Resources/translations
+    TARGET_DIR = ../src/SmartIP-Editor.app/Contents/Resources/translations
 } else {
-    TARGET_DIR = ../share/shotcut/translations
+    TARGET_DIR = ../share/editor/translations
 }
 
 updateqm.input = TRANSLATIONS
@@ -90,8 +90,8 @@ QMAKE_EXTRA_COMPILERS += updateqm
 
 unix:!mac {
     # Install rule for translations
-    qmfiles.files = $$prependAppend(LANGUAGES, $$OUT_PWD/$$TARGET_DIR/shotcut_, .qm)
-    qmfiles.path = $${PREFIX}/share/shotcut/translations
+    qmfiles.files = $$prependAppend(LANGUAGES, $$OUT_PWD/$$TARGET_DIR/editor_, .qm)
+    qmfiles.path = $${PREFIX}/share/editor/translations
     qmfiles.CONFIG += no_check_exist
     INSTALLS += qmfiles
 }

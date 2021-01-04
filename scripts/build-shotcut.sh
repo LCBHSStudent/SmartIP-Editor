@@ -17,14 +17,12 @@
 INSTALL_DIR="$HOME/shotcut"
 AUTO_APPEND_DATE=0
 SOURCE_DIR="$INSTALL_DIR/src"
-ACTION_GET_COMPILE_INSTALL=1
-ACTION_GET_ONLY=0
+ACTION_CLEAN_SOURCE=0
+ACTION_GET=1
+ACTION_CONFIGURE=1
 ACTION_COMPILE_INSTALL=1
-CLEANUP=1
-ARCHIVE=1
-SOURCES_CLEAN=0
-SOURCES_CONFIGURE=1
-INSTALL_AS_ROOT=0
+ACTION_ARCHIVE=1
+ACTION_CLEANUP=1
 DEBUG_BUILD=0
 ASAN_BUILD=0
 CREATE_STARTUP_SCRIPT=1
@@ -53,9 +51,12 @@ FFMPEG_SUPPORT_THEORA=1
 FFMPEG_SUPPORT_MP3=1
 FFMPEG_SUPPORT_FAAC=0
 FFMPEG_SUPPORT_OPUS=1
+FFMPEG_SUPPORT_ZIMG=1
 FFMPEG_SUPPORT_NVENC=1
 FFMPEG_SUPPORT_AMF=1
 FFMPEG_SUPPORT_QSV=1
+FFMPEG_SUPPORT_DAV1D=1
+FFMPEG_SUPPORT_AOM=1
 FFMPEG_ADDITIONAL_OPTIONS=
 ENABLE_VIDSTAB=1
 VIDSTAB_HEAD=1
@@ -72,6 +73,13 @@ RUBBERBAND_REVISION=
 ENABLE_BIGSH0T=1
 BIGSH0T_HEAD=1
 BIGSH0T_REVISION=
+ENABLE_ZIMG=1
+ZIMG_HEAD=1
+ZIMG_REVISION=
+DAV1D_HEAD=1
+DAV1D_REVISION=
+AOM_HEAD=1
+AOM_REVISION=
 
 # QT_INCLUDE_DIR="$(pkg-config --variable=prefix QtCore)/include"
 QT_INCLUDE_DIR=${QTDIR:+${QTDIR}/include}
@@ -210,6 +218,15 @@ function to_key {
     bigsh0t)
       echo 19
     ;;
+    zimg)
+      echo 20
+    ;;
+    dav1d)
+      echo 21
+    ;;
+    aom)
+      echo 22
+    ;;
     *)
       echo UNKNOWN
     ;;
@@ -345,21 +362,17 @@ function set_globals {
   trace "Entering set_globals @ = $@"
   # Set convenience variables.
   test "$TARGET_OS" = "" && TARGET_OS="$(uname -s)"
-  if test 1 = "$ACTION_GET_ONLY" -o 1 = "$ACTION_GET_COMPILE_INSTALL" ; then
+  if test 1 = "$ACTION_GET" ; then
     GET=1
   else
     GET=0
   fi
-  NEED_SUDO=0
-  if test 1 = "$ACTION_GET_COMPILE_INSTALL" -o 1 = "$ACTION_COMPILE_INSTALL" ; then
+  if test 1 = "$ACTION_COMPILE_INSTALL" ; then
     COMPILE_INSTALL=1
-    if test 1 = $INSTALL_AS_ROOT ; then
-      NEED_SUDO=1
-    fi
   else
     COMPILE_INSTALL=0
   fi
-  debug "GET=$GET, COMPILE_INSTALL=$COMPILE_INSTALL, NEED_SUDO=$NEED_SUDO"
+  debug "GET=$GET, COMPILE_INSTALL=$COMPILE_INSTALL"
 
   # The script sets CREATE_STARTUP_SCRIPT to true always, disable if not COMPILE_INSTALL
   if test 0 = "$COMPILE_INSTALL" ; then
@@ -410,6 +423,15 @@ function set_globals {
     if test "$ENABLE_BIGSH0T" = 1 ; then
         SUBDIRS="$SUBDIRS bigsh0t"
     fi
+    if test "$ENABLE_ZIMG" = 1 ; then
+        SUBDIRS="zimg $SUBDIRS"
+    fi
+    if test "$FFMPEG_SUPPORT_DAV1D" = 1 && test "$DAV1D_HEAD" = 1 -o "$DAV1D_REVISION" != ""; then
+        SUBDIRS="dav1d $SUBDIRS"
+    fi
+    if test "$FFMPEG_SUPPORT_AOM" = 1 && test "$AOM_HEAD" = 1 -o "$AOM_REVISION" != ""; then
+        SUBDIRS="aom $SUBDIRS"
+    fi
   fi
 
   if [ "$DEBUG_BUILD" = "1" ]; then
@@ -453,6 +475,9 @@ function set_globals {
   REPOLOCS[18]="git://github.com/breakfastquay/rubberband.git"
 #  REPOLOCS[19]="https://bitbucket.org/dandennedy/bigsh0t.git"
   REPOLOCS[19]="https://bitbucket.org/leo_sutic/bigsh0t.git"
+  REPOLOCS[20]="https://github.com/sekrit-twc/zimg.git"
+  REPOLOCS[21]="https://code.videolan.org/videolan/dav1d.git"
+  REPOLOCS[22]="https://aomedia.googlesource.com/aom"
 
   # REPOTYPE Array holds the repo types. (Yes, this might be redundant, but easy for me)
   REPOTYPES[0]="git"
@@ -472,6 +497,9 @@ function set_globals {
   REPOTYPES[17]="git"
   REPOTYPES[18]="git"
   REPOTYPES[19]="git"
+  REPOTYPES[20]="git"
+  REPOTYPES[21]="git"
+  REPOTYPES[22]="git"
 
   # And, set up the revisions
   REVISIONS[0]=""
@@ -523,8 +551,21 @@ function set_globals {
   if test 0 = "$RUBBERBAND_HEAD" -a "$RUBBERBAND_REVISION" ; then
     REVISIONS[18]="$RUBBERBAND_REVISION"
   fi
+  REVISIONS[19]=""
   if test 0 = "$BIGSH0T_HEAD" -a "$BIGSH0T_REVISION" ; then
     REVISIONS[19]="$BIGSH0T_REVISION"
+  fi
+  REVISIONS[20]=""
+  if test 0 = "$ZIMG_HEAD" -a "$ZIMG_REVISION" ; then
+    REVISIONS[20]="$ZIMG_REVISION"
+  fi
+  REVISIONS[21]=""
+  if test 0 = "$DAV1D_HEAD" -a "$DAV1D_REVISION" ; then
+    REVISIONS[21]="$DAV1D_REVISION"
+  fi
+  REVISIONS[22]=""
+  if test 0 = "$AOM_HEAD" -a "$AOM_REVISION" ; then
+    REVISIONS[22]="$AOM_REVISION"
   fi
 
   # Figure out the number of cores in the system. Used both by make and startup script
@@ -559,16 +600,16 @@ function set_globals {
     if test "$TARGET_OS" = "Win32" ; then
       export HOST=i686-w64-mingw32
       export CROSS=${HOST}.shared-
-      export QTDIR="$HOME/qt-5.15.1-x86-mingw540-sjlj"
-      export QMAKE="$HOME/Qt/5.15.1/gcc_64/bin/qmake"
-      export LRELEASE="$HOME/Qt/5.15.1/gcc_64/bin/lrelease"
+      export QTDIR="$HOME/qt-5.15.2-x86-mingw540-sjlj"
+      export QMAKE="$HOME/Qt/5.15.2/gcc_64/bin/qmake"
+      export LRELEASE="$HOME/Qt/5.15.2/gcc_64/bin/lrelease"
       export LDFLAGS="-L/opt/mxe/usr/${HOST}.shared/lib -Wl,--large-address-aware $LDFLAGS"
     else
       export HOST=x86_64-w64-mingw32
       export CROSS=${HOST}.shared-
-      export QTDIR="$HOME/qt-5.15.1-x64-mingw540-seh"
-      export QMAKE="$HOME/Qt/5.15.1/gcc_64/bin/qmake"
-      export LRELEASE="$HOME/Qt/5.15.1/gcc_64/bin/lrelease"
+      export QTDIR="$HOME/qt-5.15.2-x64-mingw540-seh"
+      export QMAKE="$HOME/Qt/5.15.2/gcc_64/bin/qmake"
+      export LRELEASE="$HOME/Qt/5.15.2/gcc_64/bin/lrelease"
       export LDFLAGS="-L/opt/mxe/usr/${HOST}.shared/lib $LDFLAGS"
     fi
     export CFLAGS="-I/opt/mxe/usr/${HOST}.shared/include $CFLAGS"
@@ -583,14 +624,14 @@ function set_globals {
     export CMAKE_ROOT="${SOURCE_DIR}/vid.stab/cmake"
     export PKG_CONFIG=pkg-config
   elif test "$TARGET_OS" = "Darwin"; then
-    export QTDIR="$HOME/Qt/5.12.9/clang_64"
+    export QTDIR="$HOME/Qt/5.12.10/clang_64"
     export RANLIB=ranlib
   else
     if test -z "$QTDIR" ; then
       if [ "$(uname -m)" = "x86_64" ]; then
-        export QTDIR="$HOME/Qt/5.15.1/gcc_64"
+        export QTDIR="$HOME/Qt/5.15.2/gcc_64"
       else
-        export QTDIR="$HOME/Qt/5.15.1/gcc"
+        export QTDIR="$HOME/Qt/5.15.2/gcc"
       fi
     fi
     export RANLIB=ranlib
@@ -627,8 +668,17 @@ function set_globals {
   if test 1 = "$FFMPEG_SUPPORT_OPUS" ; then
     CONFIG[0]="${CONFIG[0]} --enable-libopus"
   fi
+  if test 1 = "$FFMPEG_SUPPORT_ZIMG" ; then
+    CONFIG[0]="${CONFIG[0]} --enable-libzimg"
+  fi
   if test 1 = "$FFMPEG_SUPPORT_QSV" && test "$TARGET_OS" != "Darwin" && test "$TARGET_OS" != "Linux" ; then
     CONFIG[0]="${CONFIG[0]} --enable-libmfx"
+  fi
+  if test 1 = "$FFMPEG_SUPPORT_DAV1D" ; then
+    CONFIG[0]="${CONFIG[0]} --enable-libdav1d"
+  fi
+  if test 1 = "$FFMPEG_SUPPORT_AOM" ; then
+    CONFIG[0]="${CONFIG[0]} --enable-libaom --disable-decoder=libaom_av1"
   fi
   # Add optional parameters
   CONFIG[0]="${CONFIG[0]} $FFMPEG_ADDITIONAL_OPTIONS"
@@ -825,6 +875,39 @@ function set_globals {
   fi
   CFLAGS_[19]=$CFLAGS
   LDFLAGS_[19]=$LDFLAGS
+
+  #####
+  # zimg
+  CONFIG[20]="./configure --prefix=$FINAL_INSTALL_DIR"
+  if test "$TARGET_OS" = "Win32" ; then
+    CONFIG[20]="${CONFIG[20]} --host=x86-w64-mingw32"
+    CFLAGS_[20]="$CFLAGS"
+  elif test "$TARGET_OS" = "Win64" ; then
+    CONFIG[20]="${CONFIG[20]} --host=x86_64-w64-mingw32"
+    CFLAGS_[20]="$CFLAGS"
+  elif test "$TARGET_OS" = "Darwin"; then
+    CFLAGS_[20]="$CFLAGS -I/opt/local/include"
+  else
+    CFLAGS_[20]="$CFLAGS"
+  fi
+  LDFLAGS_[20]=$LDFLAGS
+
+  #####
+  # dav1d
+  CONFIG[21]="meson setup builddir --prefix=$FINAL_INSTALL_DIR --libdir=$FINAL_INSTALL_DIR/lib"
+  if [ "$DEBUG_BUILD" = "1" ]; then
+    CONFIG[21]="${CONFIG[21]} --buildtype=debug"
+  else
+    CONFIG[21]="${CONFIG[21]} --buildtype=release"
+  fi
+  CFLAGS_[21]=$CFLAGS
+  LDFLAGS_[21]=$LDFLAGS
+
+  #####
+  # aom
+  CONFIG[22]="cmake -GNinja -DCMAKE_INSTALL_PREFIX=$FINAL_INSTALL_DIR $CMAKE_DEBUG_FLAG -DBUILD_SHARED_LIBS=1 -DENABLE_EXAMPLES=0 -DENABLE_TESTS=0 ../aom"
+  CFLAGS_[22]=$CFLAGS
+  LDFLAGS_[22]=$LDFLAGS
 }
 
 ######################################################################
@@ -1104,7 +1187,7 @@ function get_subproject {
               debug "Found git repo, will update"
 
               if ! git diff-index --quiet ${REVISION:-master}; then
-                  die "git repository has local changes, aborting checkout. Consider disabling ACTION_GET_COMPILE_INSTALL or ACTION_GET_ONLY in your build config if you want to compile with these changes"
+                  die "git repository has local changes, aborting checkout. Consider disabling ACTION_GET in your build config if you want to compile with these changes"
               fi
 
               feedback_status "Pulling git sources for $1"
@@ -1214,7 +1297,7 @@ function get_all_sources {
     get_subproject $DIR
   done
   feedback_status Done getting all sources
-  if test "$TARGET_OS" = "Linux" -a "$ARCHIVE" = "1" ; then
+  if test "$TARGET_OS" = "Linux" -a "$ACTION_ARCHIVE" = "1" ; then
     feedback_status Making source archive
     cmd cd "$SOURCE_DIR"/..
     cat >src/README <<END_OF_SRC_README
@@ -1319,7 +1402,6 @@ function mlt_check_configure {
       disable-sox)
         if test "0" = "$MLT_DISABLE_SOX" ; then
           mlt_format_optional sox "sound effects/operations" "sox-dev"
-          DODIE=1
         fi
       ;;
       disable-jackrack)
@@ -1390,7 +1472,7 @@ function configure_compile_install_subproject {
   MYCONFIG=`lookup CONFIG $1`
 
   # Configure
-  if [ "$SOURCES_CONFIGURE" = "1" ]; then
+  if [ "$ACTION_CONFIGURE" = "1" ]; then
 
   feedback_status Configuring $1
 
@@ -1415,7 +1497,7 @@ function configure_compile_install_subproject {
 
   # Special hack for shotcut
   if test "shotcut" = "$1" -a \( "$TARGET_OS" = "Win32" -o "$TARGET_OS" = "Win64" \) ; then
-    sed 's/QMAKE_LIBS_OPENGL = -lGL//' -i /root/Qt/5.15.1/gcc_64/mkspecs/modules/qt_lib_gui_private.pri
+    sed 's/QMAKE_LIBS_OPENGL = -lGL//' -i /root/Qt/5.15.2/gcc_64/mkspecs/modules/qt_lib_gui_private.pri
   fi
 
   # Special hack for movit
@@ -1459,6 +1541,21 @@ function configure_compile_install_subproject {
     fi
   fi
 
+  # Special hack for zimg
+  if test "zimg" = "$1" -a ! -e configure ; then
+    debug "Need to create configure for $1"
+    cmd ./autogen.sh || die "Unable to create configure file for $1"
+    if test ! -e configure ; then
+      die "Unable to confirm presence of configure file for $1"
+    fi
+  fi
+
+  # Special hack for aom
+  if test "aom" = "$1"; then
+    cmd mkdir -p ../build-aom
+    cmd cd ../build-aom || die "Unable to change to directory aom/builddir"
+  fi
+
   if test "$MYCONFIG" != ""; then
     cmd $MYCONFIG || die "Unable to configure $1"
     feedback_status Done configuring $1
@@ -1480,12 +1577,16 @@ function configure_compile_install_subproject {
     fi
   fi
 
-  fi # if [ "$SOURCES_CONFIGURE" = "1" ]
+  fi # if [ "$ACTION_CONFIGURE" = "1" ]
 
   # Compile
   feedback_status Building $1 - this could take some time
   if test "movit" = "$1" ; then
     cmd make -j$MAKEJ RANLIB="$RANLIB" libmovit.la || die "Unable to build $1"
+  elif test "dav1d" = "$1" ; then
+    cmd ninja -C builddir -j $MAKEJ || die "Unable to build $1"
+  elif test "aom" = "$1" ; then
+    cmd ninja -j $MAKEJ || die "Unable to build $1"
   elif test "$MYCONFIG" != ""; then
     cmd make -j$MAKEJ || die "Unable to build $1"
   fi
@@ -1495,26 +1596,6 @@ function configure_compile_install_subproject {
   feedback_status Installing $1
   export LD_LIBRARY_PATH=`lookup LD_LIBRARY_PATH_ $1`
   log "LD_LIBRARY_PATH=$LD_LIBRARY_PATH"
-  if test "1" = "$NEED_SUDO" ; then
-    debug "Needs to be root to install - trying"
-    log About to run $SUDO make install
-    TMPNAME=`mktemp -t build-shotcut.installoutput.XXXXXXXXX`
-    # At least kdesudo does not return an error code if the program fails
-    # Filter output for error, and dup it to the log
-    # Special hack for libvpx
-    if test "shotcut" = "$1" ; then
-      $SUDO install -c -m 755 shotcut "$FINAL_INSTALL_DIR"
-    else
-      $SUDO make install > $TMPNAME 2>&1
-    fi
-    cat $TMPNAME 2>&1
-    # If it contains error it returns 0. 1 matches, 255 errors
-    # Filter X errors out too
-    grep -v "X Error" $TMPNAME | grep -i error 2>&1
-    if test 0 = $? ; then
-      die "Unable to install $1"
-    fi
-  else
     if test "shotcut" = "$1" ; then
       if test "$TARGET_OS" = "Win32" -o "$TARGET_OS" = "Win64" ; then
         cmd make install
@@ -1541,6 +1622,7 @@ function configure_compile_install_subproject {
         cmd cp -a "$QTDIR"/plugins/{audio,egldeviceintegrations,generic,iconengines,imageformats,mediaservice,platforminputcontexts,platforms,platformthemes,wayland-decoration-client,wayland-graphics-integration-client,wayland-graphics-integration-server,wayland-shell-integration,xcbglintegrations} "$FINAL_INSTALL_DIR"/lib/qt5
         cmd cp -p "$QTDIR"/plugins/sqldrivers/libqsqlite.so "$FINAL_INSTALL_DIR"/lib/qt5/sqldrivers
         cmd cp -a "$QTDIR"/qml "$FINAL_INSTALL_DIR"/lib
+#        cmd curl -o "$FINAL_INSTALL_DIR"/lib/qml/QtQuick/Controls.2/Fusion/ComboBox.qml "https://s3.amazonaws.com/misc.meltymedia/shotcut-build/ComboBox.qml"
         cmd install -d "$FINAL_INSTALL_DIR"/lib/va
         cmd install -p -c /usr/lib/x86_64-linux-gnu/dri/*_drv_video.so "$FINAL_INSTALL_DIR"/lib/va
       fi
@@ -1550,6 +1632,10 @@ function configure_compile_install_subproject {
       else
         cmd install -p -c *.so "$FINAL_INSTALL_DIR"/lib/frei0r-1  || die "Unable to install $1"
       fi
+    elif test "dav1d" = "$1" ; then
+      cmd meson install -C builddir || die "Unable to install $1"
+    elif test "aom" = "$1" ; then
+      cmd ninja install || die "Unable to install $1"
     elif test "$MYCONFIG" != "" ; then
       cmd make install || die "Unable to install $1"
     fi
@@ -1568,7 +1654,6 @@ function configure_compile_install_subproject {
     if test "vid.stab" = "$1" -a "Darwin" = "$TARGET_OS" ; then
       cmd sed -e 's/-fopenmp//' -i .bak "$FINAL_INSTALL_DIR/lib/pkgconfig/vidstab.pc"
     fi
-  fi
   feedback_status Done installing $1
 
   # Reestablish
@@ -1596,7 +1681,7 @@ function configure_compile_install_all {
     configure_compile_install_subproject $DIR
   done
 
-  if [ "$ARCHIVE" = "1" ] && [ "$TARGET_OS" = "Linux" ]; then
+  if [ "$ACTION_ARCHIVE" = "1" ] && [ "$TARGET_OS" = "Linux" ]; then
     log Copying some libs from system
     for lib in "$FINAL_INSTALL_DIR"/lib/qt5/{audio,generic,iconengines,imageformats,mediaservice,platforms,platforminputcontexts,platformthemes,xcbglintegrations}/*.so; do
       bundle_libs "$lib"
@@ -1823,6 +1908,7 @@ function deploy_osx
     cmd install_name_tool -delete_rpath "$QTDIR/lib" "$exe" 2> /dev/null
     cmd install_name_tool -add_rpath "@executable_path/../Frameworks" "$exe"
   done
+  cmd cp -p "$FINAL_INSTALL_DIR"/lib/libaom.2.dylib Frameworks
 
   # MLT plugins
   log Copying MLT plugins
@@ -1862,6 +1948,7 @@ function deploy_osx
   elif [ -d "/Applications/Qt Creator.app/Contents/Imports/qtquick2" ]; then
     cmd cp -a "/Applications/Qt Creator.app/Contents/Imports/qtquick2" Resources/qml
   fi
+#  cmd curl -o Resources/qml/QtQuick/Controls.2/Fusion/ComboBox.qml "https://s3.amazonaws.com/misc.meltymedia/shotcut-build/ComboBox-qt5.12.10.qml"
   for lib in $(find Resources -name '*.dylib'); do
     fixlibs "$lib"
   done
@@ -1923,11 +2010,11 @@ function deploy_osx
     popd
   fi
 
-  if [ "$ARCHIVE" = "1" ]; then
+  if [ "$ACTION_ARCHIVE" = "1" ]; then
     if [ "$SDK" = "1" ]; then
       log Making archive
       cmd tar -cJvf shotcut.txz Shotcut
-      [ "$CLEANUP" = "1" ] && cmd rm -rf Shotcut
+      [ "$ACTION_CLEANUP" = "1" ] && cmd rm -rf Shotcut
       popd
     else
       # build DMG
@@ -1959,7 +2046,7 @@ function deploy_osx
       sync
       cmd hdiutil create -fs HFS+ -srcfolder staging -volname Shotcut -format UDBZ -size 800m "$dmg_name"
 
-      if [ "$CLEANUP" = "1" ]; then
+      if [ "$ACTION_CLEANUP" = "1" ]; then
         cmd rm -rf staging
       fi
     fi
@@ -2092,7 +2179,7 @@ function deploy_win32
   fi
   printf "[Paths]\nPlugins=lib/qt5\nQml2Imports=lib/qml\n" > qt.conf
 
-  if [ "$ARCHIVE" = "1" ]; then
+  if [ "$ACTION_ARCHIVE" = "1" ]; then
     if [ "$SDK" = "1" ]; then
       # Prepare src for archiving
       pushd .
@@ -2158,7 +2245,7 @@ End-of-environment-setup-template
     die "Unable to create environment script"
   fi
   chmod 755 $TMPFILE || die "Unable to make environment script executable"
-  $SUDO cp $TMPFILE "$FINAL_INSTALL_DIR/source-me" || die "Unable to create environment script - cp failed"
+  cp $TMPFILE "$FINAL_INSTALL_DIR/source-me" || die "Unable to create environment script - cp failed"
 
   log Creating wrapper scripts in $TMPFILE
   for exe in melt ffmpeg ffplay ffprobe; do
@@ -2184,7 +2271,7 @@ End-of-exe-wrapper
       die "Unable to create wrapper script"
     fi
     chmod 755 $TMPFILE || die "Unable to make wrapper script executable"
-    $SUDO cp $TMPFILE "$FINAL_INSTALL_DIR/$exe" || die "Unable to create wrapper script - cp failed"
+    cp $TMPFILE "$FINAL_INSTALL_DIR/$exe" || die "Unable to create wrapper script - cp failed"
   done
 
   log Creating wrapper script in $TMPFILE
@@ -2214,7 +2301,7 @@ End-of-shotcut-wrapper
     die "Unable to create wrapper script"
   fi
   chmod 755 $TMPFILE || die "Unable to make wrapper script executable"
-  $SUDO cp $TMPFILE "$FINAL_INSTALL_DIR/shotcut" || die "Unable to create wrapper script - cp failed"
+  cp $TMPFILE "$FINAL_INSTALL_DIR/shotcut" || die "Unable to create wrapper script - cp failed"
 
   popd
 
@@ -2226,7 +2313,7 @@ End-of-shotcut-wrapper
   if test 0 != $? ; then
     die "Unable to create desktop file"
   fi
-  $SUDO cp $TMPFILE "$FINAL_INSTALL_DIR/../Shotcut.desktop" || die "Unable to create desktop file - cp failed"
+  cp $TMPFILE "$FINAL_INSTALL_DIR/../Shotcut.desktop" || die "Unable to create desktop file - cp failed"
 
   feedback_status Done creating startup and environment script
 
@@ -2242,7 +2329,7 @@ End-of-shotcut-wrapper
     fi
   done
 
-  if [ "$ARCHIVE" = "1" ]; then
+  if [ "$ACTION_ARCHIVE" = "1" ]; then
     log Creating archive
     tarball="$INSTALL_DIR/shotcut.txz"
     cmd rm "$tarball" 2>/dev/null
@@ -2265,7 +2352,7 @@ End-of-shotcut-wrapper
     cmd tar -cJvf "$tarball" Shotcut
   fi
 
-  if [ "$CLEANUP" = "1" ]; then
+  if [ "$ACTION_CLEANUP" = "1" ]; then
     log Cleaning Up
     cmd rm -rf Shotcut
   fi
@@ -2279,7 +2366,7 @@ End-of-shotcut-wrapper
 function perform_action {
   trace "Entering perform_action @ = $@"
   # Test that may fail goes here, before we do anything
-  if test 1 = "$SOURCES_CLEAN"; then
+  if test 1 = "$ACTION_CLEAN_SOURCE"; then
     clean_dirs
   fi
   if test 1 = "$GET"; then
@@ -2353,24 +2440,6 @@ function main {
   CHECKERPID=$!
   # debug "Checker process is running with pid=$CHECKERPID"
 
-  # Special case for sudo getting
-  SUDO=""
-  log "Checking for sudo requirement" 2>&1
-  if test "1" = "$NEED_SUDO" ; then
-    log "sudo is needed"
-        echo You have chosen to install as root.
-        echo
-        echo 'Please provide your sudo password below.  (If you have recently provided your sudo password to this script, you may not have to do that, because the password is cached).'
-        echo
-        echo The password will be handled securely by the sudo program.
-        echo
-        echo If you fail to provide the password, you will have to provide it later when installing the different projects.
-        sudo -v
-        if test 0 != $? ; then
-          die "Unable to proceed"
-        fi
-        SUDO=sudo
-  fi
   log "Done checking for sudo requirement" 2>&1
 
   {

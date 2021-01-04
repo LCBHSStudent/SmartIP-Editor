@@ -1,8 +1,8 @@
 include(editor.pri)
 
-!minQtVersion(5, 10, 0) {
+!minQtVersion(5, 12, 0) {
     message("Cannot build Editor with Qt version $${QT_VERSION}.")
-    error("Use at least Qt 5.10.0")
+    error("Use at least Qt 5.12.0")
 }
 
 TEMPLATE = subdirs
