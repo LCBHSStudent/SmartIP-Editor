@@ -255,95 +255,6 @@
         <file>smartip_icon.png</file>
         <file>dark/32x32/ic-microphone.png</file>
         <file>dark/32x32/ic-recording.png</file>
-        <file>dark/adjust_22.png</file>
-        <file>dark/adjust_44.png</file>
-        <file>dark/adjust_speed_25x21.png</file>
-        <file>dark/adjust_speed_49x42.png</file>
-        <file>dark/audio_view_27x20.png</file>
-        <file>dark/audio_view_54x39.png</file>
-        <file>dark/bin_22.png</file>
-        <file>dark/bin_44.png</file>
-        <file>dark/classic_timeline_24x18.png</file>
-        <file>dark/classic_timeline_47x35.png</file>
-        <file>dark/cut_22x20.png</file>
-        <file>dark/cut_44x40.png</file>
-        <file>dark/effect_20.png</file>
-        <file>dark/effect_40.png</file>
-        <file>dark/effect_applied_23x20.png</file>
-        <file>dark/effect_applied_45x39.png</file>
-        <file>dark/fast_backword_23x16.png</file>
-        <file>dark/fast_backword_45x31.png</file>
-        <file>dark/fastforward_23x16.png</file>
-        <file>dark/fastforward_45x31.png</file>
-        <file>dark/fullscreen_23x21.png</file>
-        <file>dark/fullscreen_46x41.png</file>
-        <file>dark/help_15.png</file>
-        <file>dark/help_30.png</file>
-        <file>dark/history_19.png</file>
-        <file>dark/history_38.png</file>
-        <file>dark/ic_text_22x20.png</file>
-        <file>dark/ic_text_43x39.png</file>
-        <file>dark/keypoint_left_15x18.png</file>
-        <file>dark/keypoint_left_29x36.png</file>
-        <file>dark/keypoint_right_15x18.png</file>
-        <file>dark/keypoint_right_29x36.png</file>
-        <file>dark/mark_21.png</file>
-        <file>dark/mark_42.png</file>
-        <file>dark/menu_load_19.png</file>
-        <file>dark/menu_load_38.png</file>
-        <file>dark/music_21.png</file>
-        <file>dark/music_42.png</file>
-        <file>dark/picture_22x20.png</file>
-        <file>dark/picture_44x40.png</file>
-        <file>dark/play_61.png</file>
-        <file>dark/play_122.png</file>
-        <file>dark/price_total_16x20.png</file>
-        <file>dark/price_total_31x40.png</file>
-        <file>dark/redo_22.png</file>
-        <file>dark/redo_44.png</file>
-        <file>dark/rotation_cut_24.png</file>
-        <file>dark/rotation_cut_46.png</file>
-        <file>dark/setting_32.png</file>
-        <file>dark/setting_screen_24x21.png</file>
-        <file>dark/setting_screen_47x41.png</file>
-        <file>dark/snapshot_20.png</file>
-        <file>dark/snapshot_40.png</file>
-        <file>dark/speech_to_text_22.png</file>
-        <file>dark/speech_to_text_43.png</file>
-        <file>dark/split_screen_22x20.png</file>
-        <file>dark/split_screen_43x40.png</file>
-        <file>dark/timeline_audio_16x13.png</file>
-        <file>dark/timeline_audio_31x25.png</file>
-        <file>dark/timeline_boost_view_17.png</file>
-        <file>dark/timeline_boost_view_34.png</file>
-        <file>dark/timeline_narrow_view_17.png</file>
-        <file>dark/timeline_narrow_view_34.png</file>
-        <file>dark/timeline_record_12x16.png</file>
-        <file>dark/timeline_record_23x31.png</file>
-        <file>dark/timeline_sacle_fit_35x18.png</file>
-        <file>dark/timeline_sacle_fit_70x36.png.png</file>
-        <file>dark/timeline_slider_130x31.png</file>
-        <file>dark/timeline_slider_260x62.png</file>
-        <file>dark/timeline_video_13.png</file>
-        <file>dark/timeline_video_26.png</file>
-        <file>dark/tools_23.png</file>
-        <file>dark/tools_45.png</file>
-        <file>dark/transition_22.png</file>
-        <file>dark/transition_44.png</file>
-        <file>dark/undo_22.png</file>
-        <file>dark/undo_44.png</file>
-        <file>dark/user_icon_39.png</file>
-        <file>dark/user_icon_77.png</file>
-        <file>dark/window_close_15.png</file>
-        <file>dark/window_close_30.png</file>
-        <file>dark/window_max_18.png</file>
-        <file>dark/window_max_35.png</file>
-        <file>dark/window_min_21x2.png</file>
-        <file>dark/window_min_41x3.png</file>
-        <file>dark/index.theme</file>
-        <file>dark/setting_19.png</file>
-        <file>dark/menu_item_checked.png</file>
-        <file>dark/menu_item_unchecked.png</file>
         <file>oxygen/32x32/actions/dialog-cancel.png</file>
         <file>oxygen/32x32/actions/keyframes-filter-in.png</file>
         <file>oxygen/32x32/actions/keyframes-filter-out.png</file>
@@ -351,6 +262,43 @@
         <file>oxygen/32x32/actions/keyframes-simple-out.png</file>
         <file>oxygen/32x32/actions/padlock-closed.png</file>
         <file>oxygen/32x32/actions/padlock-opened.png</file>
-        <file>resources.qrc</file>
+        <file>smartip_icon_22x22.png</file>
+        <file>dark/ptcontroller/undo.png</file>
+        <file>dark/ptcontroller/redo.png</file>
+        <file>dark/ptcontroller/prev_keypoint.png</file>
+        <file>dark/ptcontroller/fullscreen.png</file>
+        <file>dark/ptcontroller/keyframes.png</file>
+        <file>dark/ptcontroller/fastbackward.png</file>
+        <file>dark/ptcontroller/clip.png</file>
+        <file>dark/ptcontroller/preview.png</file>
+        <file>dark/ptcontroller/adjust_speed.png</file>
+        <file>dark/ptcontroller/fastforward.png</file>
+        <file>dark/ptcontroller/reocrd_audio.png</file>
+        <file>dark/ptcontroller/snapshot.png</file>
+        <file>dark/ptcontroller/play.png</file>
+        <file>dark/ptcontroller/mark.png</file>
+        <file>dark/ptcontroller/streaming_cut-record.png</file>
+        <file>dark/ptcontroller/next_keypoint.png</file>
+        <file>dark/ptcontroller/gb.png</file>
+        <file>dark/ptcontroller/resize_timeline_fit.png</file>
+        <file>dark/ptcontroller/speech_to_text.png</file>
+        <file>dark/rstoolbar/split_screen.png</file>
+        <file>dark/rstoolbar/text.png</file>
+        <file>dark/rstoolbar/filter.png</file>
+        <file>dark/rstoolbar/effect.png</file>
+        <file>dark/rstoolbar/video.png</file>
+        <file>dark/rstoolbar/transistion.png</file>
+        <file>dark/rstoolbar/music.png</file>
+        <file>dark/rstoolbar/audio.png</file>
+        <file>dark/ptcontroller/timeline_boost.png</file>
+        <file>dark/ptcontroller/timeline_narrow.png</file>
+        <file>dark/btn_history_operation.png</file>
+        <file>dark/btn_leadin.png</file>
+        <file>dark/btn_login.png</file>
+        <file>dark/btn_mession.png</file>
+        <file>dark/btn_window_close.png</file>
+        <file>dark/btn_window_maximum.png</file>
+        <file>dark/btn_window_minimum.png</file>
     </qresource>
+    <qresource prefix="/"/>
 </RCC>
