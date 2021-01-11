@@ -299,6 +299,16 @@
         <file>dark/btn_window_close.png</file>
         <file>dark/btn_window_maximum.png</file>
         <file>dark/btn_window_minimum.png</file>
+        <file>dark/timeline/audio.png</file>
+        <file>dark/timeline/connect.png</file>
+        <file>dark/timeline/keyframe.png</file>
+        <file>dark/timeline/lock.png</file>
+        <file>dark/timeline/next_keyframe.png</file>
+        <file>dark/timeline/pointer.png</file>
+        <file>dark/timeline/prev_keyframe.png</file>
+        <file>dark/timeline/single_channel.png</file>
+        <file>dark/timeline/unlock.png</file>
+        <file>dark/timeline/video.png</file>
     </qresource>
     <qresource prefix="/"/>
 </RCC>
