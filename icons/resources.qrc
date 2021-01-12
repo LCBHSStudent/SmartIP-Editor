@@ -304,11 +304,12 @@
         <file>dark/timeline/keyframe.png</file>
         <file>dark/timeline/lock.png</file>
         <file>dark/timeline/next_keyframe.png</file>
-        <file>dark/timeline/pointer.png</file>
         <file>dark/timeline/prev_keyframe.png</file>
         <file>dark/timeline/single_channel.png</file>
         <file>dark/timeline/unlock.png</file>
         <file>dark/timeline/video.png</file>
+        <file>dark/timeline/cursor_head.png</file>
+        <file>dark/timeline/cursor_scissor.png</file>
     </qresource>
     <qresource prefix="/"/>
 </RCC>
