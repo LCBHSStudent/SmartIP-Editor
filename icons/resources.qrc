@@ -311,6 +311,12 @@
         <file>dark/timeline/cursor_head.png</file>
         <file>dark/timeline/cursor_scissor.png</file>
         <file>dark/timeline/avlink_mark.png</file>
+        <file>dark/timeline/audio_ban.png</file>
+        <file>dark/timeline/video_ban.png</file>
+        <file>dark/media_type_audio.png</file>
+        <file>dark/media_type_image.png</file>
+        <file>dark/media_type_video.png</file>
+        <file>dark/media_label_audio.png</file>
     </qresource>
     <qresource prefix="/images">
         <file>img/transparent_preview_foreground.png</file>
