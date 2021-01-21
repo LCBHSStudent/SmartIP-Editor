@@ -317,6 +317,25 @@
         <file>dark/media_type_image.png</file>
         <file>dark/media_type_video.png</file>
         <file>dark/media_label_audio.png</file>
+        <file>img/transparent_preview_foreground.png</file>
+        <file>img/transparent_preview_foreground_bar.png</file>
+        <file>login/passwd_36.png</file>
+        <file>login/passwd_72.png</file>
+        <file>login/phoneLogin.png</file>
+        <file>login/qq.png</file>
+        <file>login/returnBack.png</file>
+        <file>login/user_36.png</file>
+        <file>login/user_72.png</file>
+        <file>login/wechat.png</file>
+        <file>login/weibo.png</file>
+        <file>menu/backgrouddot.png</file>
+        <file>menu/checked.png</file>
+        <file>menu/rightarrow.png</file>
+        <file>menu/unchecked.png</file>
+        <file>menu/whitedot.png</file>
+        <file>newproj/bilibili.png</file>
+        <file>newproj/downArrow.png</file>
+        <file>newproj/fire.png</file>
     </qresource>
     <qresource prefix="/images">
         <file>img/transparent_preview_foreground.png</file>
