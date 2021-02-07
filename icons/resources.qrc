@@ -324,5 +324,7 @@
         <file>renderPage/unchecked.png</file>
         <file>renderPage/sliderIcon.jpg</file>
         <file>renderPage/smallScale.png</file>
+        <file>record/zoom.png</file>
+        <file>login/phoneAccount.png</file>
     </qresource>
 </RCC>
