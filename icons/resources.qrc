@@ -372,6 +372,7 @@
         <file>dark/triple_indicator_withframe.png</file>
         <file>dark/price_bg_body.png</file>
         <file>dark/price_bg_head.png</file>
+        <file>login/phoneAccount.png</file>
     </qresource>
     <qresource prefix="/images">
         <file>img/transparent_preview_foreground.png</file>
