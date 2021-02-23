@@ -287,7 +287,7 @@
         <file>dark/rstoolbar/filter.png</file>
         <file>dark/rstoolbar/effect.png</file>
         <file>dark/rstoolbar/video.png</file>
-        <file>dark/rstoolbar/transistion.png</file>
+        <file>dark/rstoolbar/transition.png</file>
         <file>dark/rstoolbar/music.png</file>
         <file>dark/rstoolbar/audio.png</file>
         <file>dark/ptcontroller/timeline_boost.png</file>
@@ -336,9 +336,46 @@
         <file>newproj/bilibili.png</file>
         <file>newproj/downArrow.png</file>
         <file>newproj/fire.png</file>
+        <file>dark/toolpanel/horizontal_rotate.png</file>
+        <file>dark/toolpanel/magnifier.png</file>
+        <file>dark/toolpanel/navigation.png</file>
+        <file>dark/toolpanel/reset.png</file>
+        <file>dark/toolpanel/tubularis.png</file>
+        <file>dark/toolpanel/vertical_rotate.png</file>
+        <file>dark/toolpanel/elevator_down.png</file>
+        <file>dark/toolpanel/elevator_up.png</file>
+        <file>record/zoom.png</file>
+        <file>renderPage/checked.png</file>
+        <file>renderPage/close.png</file>
+        <file>renderPage/file.png</file>
+        <file>renderPage/sliderIcon.jpg</file>
+        <file>renderPage/smallScale.png</file>
+        <file>renderPage/unchecked.png</file>
+        <file>dark/ptcontroller/add_to_track.png</file>
+        <file>dark/ptcontroller/grid.png</file>
+        <file>dark/ptcontroller/keyframes_backup.png</file>
+        <file>dark/ptcontroller/resize_timeline_fit_backup.png</file>
+        <file>dark/ptcontroller/safe_margin.png</file>
+        <file>dark/ptcontroller/scale_level.png</file>
+        <file>dark/ptcontroller/volume.png</file>
+        <file>dark/bubble_bg.png</file>
+        <file>dark/tool_popup_label.png</file>
+        <file>dark/ptcontroller/pause.png</file>
+        <file>dark/ptcontroller/volume_mute.png</file>
+        <file>dark/ptcontroller/volume_ruler.png</file>
+        <file>dark/ptcontroller/menu_arrow.png</file>
+        <file>dark/ptcontroller/add.png</file>
+        <file>dark/ptcontroller/remove.png</file>
+        <file>dark/ptcontroller/mask.png</file>
+        <file>dark/ptcontroller/volume_nomute.png</file>
+        <file>dark/triple_indicator.png</file>
+        <file>dark/triple_indicator_withframe.png</file>
+        <file>dark/price_bg_body.png</file>
+        <file>dark/price_bg_head.png</file>
     </qresource>
     <qresource prefix="/images">
         <file>img/transparent_preview_foreground.png</file>
         <file>img/transparent_preview_foreground_bar.png</file>
     </qresource>
+    <qresource prefix="/"/>
 </RCC>
