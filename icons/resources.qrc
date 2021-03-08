@@ -372,6 +372,36 @@
         <file>dark/triple_indicator_withframe.png</file>
         <file>dark/price_bg_body.png</file>
         <file>dark/price_bg_head.png</file>
+        <file>dark/toolpanel/favorite_checked.png</file>
+        <file>dark/toolpanel/favorite_unchecked.png</file>
+        <file>dark/toolpanel/transition/circular_diffusion.png</file>
+        <file>dark/toolpanel/transition/clockwise_erase.png</file>
+        <file>dark/toolpanel/transition/counter_clockwise_erase.png</file>
+        <file>dark/toolpanel/transition/double_circle_diffusion.png</file>
+        <file>dark/toolpanel/transition/fade_in_out.png</file>
+        <file>dark/toolpanel/transition/horizontal_snake_1.png</file>
+        <file>dark/toolpanel/transition/horizontal_snake_2.png</file>
+        <file>dark/toolpanel/transition/horizontally_close.png</file>
+        <file>dark/toolpanel/transition/horizontally_erase.png</file>
+        <file>dark/toolpanel/transition/horiztontal_waterfall.png</file>
+        <file>dark/toolpanel/transition/obliquely_close_1.png</file>
+        <file>dark/toolpanel/transition/obliquely_close_2.png</file>
+        <file>dark/toolpanel/transition/obliquely_erase_1.png</file>
+        <file>dark/toolpanel/transition/obliquely_erase_2.png</file>
+        <file>dark/toolpanel/transition/rectangular_diffusion_1.png</file>
+        <file>dark/toolpanel/transition/rectangular_diffusion_2.png</file>
+        <file>dark/toolpanel/transition/rectangular_diffusion_3.png</file>
+        <file>dark/toolpanel/transition/v_shaped_symmetry.png</file>
+        <file>dark/toolpanel/transition/vertical_snake_1.png</file>
+        <file>dark/toolpanel/transition/vertical_snake_2.png</file>
+        <file>dark/toolpanel/transition/vertical_waterfall.png</file>
+        <file>dark/toolpanel/transition/vertically_close.png</file>
+        <file>dark/toolpanel/transition/vertically_erase.png</file>
+        <file>dark/mode_edit.png</file>
+        <file>dark/mode_medialib.png</file>
+        <file>dark/ptcontroller/next_frame.png</file>
+        <file>dark/ptcontroller/prev_frame.png</file>
+        <file>dark/ptcontroller/fullscreen_close.png</file>
     </qresource>
     <qresource prefix="/images">
         <file>img/transparent_preview_foreground.png</file>
