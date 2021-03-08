@@ -402,6 +402,8 @@
         <file>dark/ptcontroller/next_frame.png</file>
         <file>dark/ptcontroller/prev_frame.png</file>
         <file>dark/ptcontroller/fullscreen_close.png</file>
+        <file>login/phoneAccount.png</file>
+        <file>login/close.png</file>
     </qresource>
     <qresource prefix="/images">
         <file>img/transparent_preview_foreground.png</file>
