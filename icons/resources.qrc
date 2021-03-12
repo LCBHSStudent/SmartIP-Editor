@@ -338,7 +338,6 @@
         <file>newproj/fire.png</file>
         <file>dark/toolpanel/horizontal_rotate.png</file>
         <file>dark/toolpanel/magnifier.png</file>
-        <file>dark/toolpanel/navigation.png</file>
         <file>dark/toolpanel/reset.png</file>
         <file>dark/toolpanel/tubularis.png</file>
         <file>dark/toolpanel/vertical_rotate.png</file>
@@ -404,6 +403,8 @@
         <file>dark/ptcontroller/fullscreen_close.png</file>
         <file>login/phoneAccount.png</file>
         <file>login/close.png</file>
+        <file>dark/toolpanel/cuttler.png</file>
+        <file>dark/toolpanel/keyframe.png</file>
     </qresource>
     <qresource prefix="/images">
         <file>img/transparent_preview_foreground.png</file>
